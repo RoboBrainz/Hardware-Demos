@@ -18,18 +18,26 @@
  */
 
 // pins for the LEDs:
-const int redPin = 3;
-const int greenPin = 5;
-const int bluePin = 6;
+//const int redPin = 3;
+//const int greenPin = 5;
+//const int bluePin = 6;
+
+#include <Adafruit_NeoPixel.h>
+
+#define PIN 6
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, PIN, NEO_RGB + NEO_KHZ800);
 
 void setup() {
   // initialize serial:
   Serial.begin(9600);
+  strip.begin();
+  strip.show();
+  // Initialize all pixels to 'off'
   // make the pins outputs:
-  pinMode(redPin, OUTPUT); 
-  pinMode(greenPin, OUTPUT); 
-  pinMode(bluePin, OUTPUT); 
-
+  //pinMode(redPin, OUTPUT); 
+  //pinMode(greenPin, OUTPUT); 
+  //pinMode(bluePin, OUTPUT); 
 }
 
 void loop() {
@@ -48,14 +56,17 @@ void loop() {
     if (Serial.read() == '\n') {
       // constrain the values to 0 - 255 and invert
       // if you're using a common-cathode LED, just use "constrain(color, 0, 255);"
-      red = 255 - constrain(red, 0, 255);
-      green = 255 - constrain(green, 0, 255);
-      blue = 255 - constrain(blue, 0, 255);
+      red = constrain(red, 0, 255);
+      green = constrain(green, 0, 255);
+      blue = constrain(blue, 0, 255);
 
       // fade the red, green, and blue legs of the LED: 
-      analogWrite(redPin, red);
-      analogWrite(greenPin, green);
-      analogWrite(bluePin, blue);
+      //analogWrite(redPin, red);
+      //analogWrite(greenPin, green);
+      //analogWrite(bluePin, blue);
+      strip.setPixelColor(1, strip.getPixelColor(0));
+      strip.setPixelColor(0, strip.Color(red, green, blue));
+      strip.show();
 
       // print the three numbers in one string as hexadecimal:
       if (red < 16)
